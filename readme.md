@@ -22,5 +22,8 @@ CampusEase is a web platform designed to simplify campus life for college studen
 To get started with CampusEase, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/Vinayak2k03/CampusEase.git`
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev`
+2. Open all three folders one by one in integrated terminal and run this command: `npm install`
+3. Open Admin folder in terminal and run this command: `npm run dev`
+4. Open frontend folder in terminal and run this command: `npm run dev`
+5. Open Backend folder in terminal and run this command: `npm run server`
+6. Now open the link in the frontend terminal which will be like this : `http://localhost:5174`
