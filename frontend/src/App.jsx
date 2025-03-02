@@ -6,12 +6,8 @@ import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Footer from "./components/Footer/Footer";
 import FoodLaundry from "./pages/FoodLaundry/FoodLaundry";
-import Laundry from "./pages/Laundry/Laundry";
 import Food from "./pages/Food/Food";
-import Pickup from "./pages/Laundry/Pickup";
 import OrderPlaced from "./pages/PlaceOrder/orderPlaced";
-import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
-import { useAuth0 } from "@auth0/auth0-react";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/MyOrders/MyOrders";
@@ -21,7 +17,7 @@ const App = () => {
   // Check if the user's email is the specific email for admin access
   // const isAdmin =
   //   isAuthenticated && user && user.email === "vinayaknagar2810@gmail.com";
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
 
   return (
     <>
@@ -36,8 +32,6 @@ const App = () => {
           <Route path="/order" element={<PlaceOrder />} />
           {/* <Route path="/order/orderPlaced" element={<OrderPlaced />} /> */}
           <Route path="/orderPlaced" element={<OrderPlaced />} />
-          <Route path="/laundry" element={<Laundry />} />
-          <Route path="/laundry/Pickup" element={<Pickup />} />
           <Route path="/login" element={<LoginPopup />} />
           <Route path='/verify' element={<Verify/>} />
           <Route path='/myorders' element={<MyOrders/>} />

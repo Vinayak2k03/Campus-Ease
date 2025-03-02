@@ -3,14 +3,12 @@ import "./Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-  const isLaundryPage = location.pathname === "/laundry";
   const isLoginPage = location.pathname === "/login";
   const isOrderConfPage = location.pathname === "/order/orderPlaced";
   const navigate=useNavigate();
@@ -34,7 +32,7 @@ const Navbar = ({ setShowLogin }) => {
           <img src={assets.logo} alt="" className="logo" />
         </Link>
       )}
-      {!isHomePage && !isLaundryPage && !isLoginPage && !isOrderConfPage && (
+      {!isHomePage && !isLoginPage && !isOrderConfPage && (
         <ul className="navbar-menu">
           <Link
             to="/"
