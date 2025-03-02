@@ -17,7 +17,7 @@ const App = () => {
   // Check if the user's email is the specific email for admin access
   // const isAdmin =
   //   isAuthenticated && user && user.email === "vinayaknagar2810@gmail.com";
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   return (
     <>
