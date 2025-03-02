@@ -9,7 +9,7 @@ import Stripe from "stripe";
 const placeOrder = async (req, res) => {
 
   //If deploying it online, replace the frontend_url with the app url
-  const frontend_url = "http://localhost:5174";
+  const frontend_url = "http://localhost:5173";
   try {
     const newOrder = new orderModel({
       userId: req.body.userId,
