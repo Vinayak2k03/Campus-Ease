@@ -55,26 +55,43 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Debug VM_HOST value
+        run: |
+          echo "VM_HOST value length: ${#VM_HOST}"
+          # Print first few characters to check format without revealing full IP
+          echo "VM_HOST starts with: ${VM_HOST:0:2}..."
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+
       - name: Setup known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+          echo "Running ssh-keyscan for ${{ secrets.VM_HOST }}"
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts || echo "Keyscan failed"
+          cat ~/.ssh/known_hosts
 
-      - name: Deploy to VM
+      - name: Deploy to VM with direct IP
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
-          VM_HOST: ${{ secrets.VM_HOST }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
         run: |
-          # Create required directories on the VM
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }} "mkdir -p ~/Campus-Ease/frontend ~/Campus-Ease/Admin ~/Campus-Ease/Backend"
+          # Use the IP address directly
+          echo "Testing SSH connection..."
+          ssh -o StrictHostKeyChecking=accept-new ${{ secrets.SSH_USER }}@54.81.119.40 "echo SSH connection successful"
           
-          # Copy files to VM
-          scp -r frontend/dist/* ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }}:~/Campus-Ease/frontend/dist/
-          scp -r Admin/dist/* ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }}:~/Campus-Ease/Admin/dist/
-          scp -r Backend/* ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }}:~/Campus-Ease/Backend/
+          echo "Creating directories..."
+          ssh ${{ secrets.SSH_USER }}@54.81.119.40 "mkdir -p ~/Campus-Ease/frontend/dist ~/Campus-Ease/Admin/dist ~/Campus-Ease/Backend"
           
-          # Execute deployment script
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }} "export DATABASE_URL='$DATABASE_URL' && export JWT_SECRET='$JWT_SECRET' && export DOMAIN_NAME='$DOMAIN_NAME' && cd ~/Campus-Ease && bash ./deploy.sh"
+          echo "Copying frontend files..."
+          scp -r frontend/dist/* ${{ secrets.SSH_USER }}@54.81.119.40:~/Campus-Ease/frontend/dist/
+          
+          echo "Copying admin files..."
+          scp -r Admin/dist/* ${{ secrets.SSH_USER }}@54.81.119.40:~/Campus-Ease/Admin/dist/
+          
+          echo "Copying backend files..."
+          scp -r Backend/* ${{ secrets.SSH_USER }}@54.81.119.40:~/Campus-Ease/Backend/
+          
+          echo "Executing deployment script..."
+          ssh ${{ secrets.SSH_USER }}@54.81.119.40 "export DATABASE_URL='$DATABASE_URL' && export JWT_SECRET='$JWT_SECRET' && export DOMAIN_NAME='$DOMAIN_NAME' && cd ~/Campus-Ease && bash ./deploy.sh"
