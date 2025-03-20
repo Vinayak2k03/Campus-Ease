@@ -1,57 +1,3 @@
-// import { createContext,useEffect,useState } from "react";
-// import { food_list } from "../assets/assets";
-// import { restaurant_list } from "../assets/assets";
-// import { ServiceList } from "../assets/assets";
-// import { laundry_list } from "../assets/assets";
-
-// export const StoreContext=createContext(null)
-
-// const StoreContextProvider=(props) => {
-//   const [cartItems, setCartItems] = useState({});
-
-//   const addToCart=(itemId)=>{
-//     if(!cartItems[itemId]){
-//         setCartItems((prev)=>({...prev,[itemId]:1}))
-//     }
-//     else{
-//         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
-//     }
-//   }
-
-//   const removeFromCart=(itemId)=>{
-//     setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
-//   }
-
-//   const getTotalCartAmount=()=>{
-//     let totalAmount=0;
-//     for (const item in cartItems) {
-//       if(cartItems[item]>0){
-//         let itemInfo=food_list.find((product)=>product._id===item)
-//         totalAmount+=itemInfo.price*cartItems[item];
-//       }
-//     }
-//     return totalAmount;
-//   }
-
-//     const contextValue={
-//         food_list,
-//         cartItems,
-//         setCartItems,
-//         addToCart,
-//         removeFromCart,
-//         getTotalCartAmount,
-//         restaurant_list,
-//         ServiceList,
-//         laundry_list
-//     }
-
-//     return(
-//         <StoreContext.Provider value={contextValue}>{props.children}</StoreContext.Provider>
-//     )
-// }
-
-// export default StoreContextProvider
-
 import { createContext, useEffect, useState } from "react";
 import { restaurant_list } from "../assets/assets";
 import { ServiceList } from "../assets/assets";
@@ -62,7 +8,7 @@ export const StoreContext = createContext();
 
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  const url = "https://campus-ease-backend.onrender.com";
+  const url = "https://campusease.vinayaknagar.tech/api";
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
 
@@ -75,7 +21,7 @@ const StoreContextProvider = (props) => {
 
     if (token) {
       await axios.post(
-        url + "/api/cart/add",
+        url + "/cart/add",
         { itemId },
         { headers: { token } }
       );
@@ -85,8 +31,8 @@ const StoreContextProvider = (props) => {
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     
-    if(token){
-      await axios.post(url+'/api/cart/remove',{itemId},{headers:{token}})
+    if (token) {
+      await axios.post(url + "/cart/remove", { itemId }, { headers: { token } });
     }
   };
 
@@ -102,14 +48,14 @@ const StoreContextProvider = (props) => {
   };
 
   const fetchFoodList = async () => {
-    const response = await axios.get(url + "/api/food/list");
+    const response = await axios.get(url + "/food/list");
     setFoodList(response.data.data);
   };
 
-  const loadCartData=async(token)=>{
-    const response=await axios.post(url+'/api/cart/get',{},{headers:{token}});
+  const loadCartData = async (token) => {
+    const response = await axios.post(url + "/cart/get", {}, { headers: { token } });
     setCartItems(response.data.cartData);
-  }
+  };
 
   useEffect(() => {
     async function loadData() {

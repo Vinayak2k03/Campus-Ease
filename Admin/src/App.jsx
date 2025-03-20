@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
-  const url = "https://campus-ease-backend.onrender.com";
+  const url = "https://campusease.vinayaknagar.tech/api";
   return (
     <div>
       <ToastContainer />
