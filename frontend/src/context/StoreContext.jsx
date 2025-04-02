@@ -8,7 +8,7 @@ export const StoreContext = createContext();
 
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  const url = "https://campusease.vinayaknagar.tech/api";
+  const url = "https://campus-ease-backend.onrender.com";
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
 
@@ -21,7 +21,7 @@ const StoreContextProvider = (props) => {
 
     if (token) {
       await axios.post(
-        url + "/cart/add",
+        url + "/api/cart/add",
         { itemId },
         { headers: { token } }
       );
@@ -32,7 +32,7 @@ const StoreContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     
     if (token) {
-      await axios.post(url + "/cart/remove", { itemId }, { headers: { token } });
+      await axios.post(url + "/api/cart/remove", { itemId }, { headers: { token } });
     }
   };
 
@@ -48,12 +48,12 @@ const StoreContextProvider = (props) => {
   };
 
   const fetchFoodList = async () => {
-    const response = await axios.get(url + "/food/list");
+    const response = await axios.get(url + "/api/food/list");
     setFoodList(response.data.data);
   };
 
   const loadCartData = async (token) => {
-    const response = await axios.post(url + "/cart/get", {}, { headers: { token } });
+    const response = await axios.post(url + "/api/cart/get", {}, { headers: { token } });
     setCartItems(response.data.cartData);
   };
 
